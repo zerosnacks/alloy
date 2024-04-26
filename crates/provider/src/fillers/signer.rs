@@ -20,7 +20,7 @@ use super::{FillerControlFlow, TxFiller};
 /// # async fn test<S: NetworkSigner<Ethereum> + Clone>(url: url::Url, signer: S) -> Result<(), Box<dyn std::error::Error>> {
 /// let provider = ProviderBuilder::new()
 ///     .signer(signer)
-///     .on_http(url)?;
+///     .on_http(url);
 ///
 /// provider.send_transaction(TransactionRequest::default()).await;
 /// # Ok(())
@@ -62,12 +62,9 @@ where
             return FillerControlFlow::Ready;
         }
 
-        if tx.can_build() {
-            FillerControlFlow::Ready
-        } else {
-            // Blocked by #431
-            // https://github.com/alloy-rs/alloy/pull/431
-            FillerControlFlow::Missing(vec![("Signer", &["TODO"])])
+        match tx.complete_preferred() {
+            Ok(_) => FillerControlFlow::Ready,
+            Err(e) => FillerControlFlow::Missing(vec![("Signer", e)]),
         }
     }
 

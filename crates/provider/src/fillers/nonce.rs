@@ -35,7 +35,7 @@ use tokio::sync::Mutex;
 /// let provider = ProviderBuilder::new()
 ///     .with_nonce_management()
 ///     .signer(signer)
-///     .on_http(url)?;
+///     .on_http(url);
 ///
 /// provider.send_transaction(TransactionRequest::default()).await;
 /// # Ok(())
@@ -54,7 +54,7 @@ impl<N: Network> TxFiller<N> for NonceFiller {
             return FillerControlFlow::Finished;
         }
         if tx.from().is_none() {
-            return FillerControlFlow::missing("NonceManager", &["from"]);
+            return FillerControlFlow::missing("NonceManager", vec!["from"]);
         }
         FillerControlFlow::Ready
     }
