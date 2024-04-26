@@ -15,7 +15,7 @@ concurrency:
 jobs:
   test:
     name: test ${{ matrix.os}} ${{ matrix.rust }} ${{ matrix.flags }}
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
     timeout-minutes: 30
     strategy:
       fail-fast: false
