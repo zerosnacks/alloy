@@ -20,7 +20,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [" "windows-latest"]
+        os: ["windows-latest"]
         rust: ["stable"] # MSRV
         flags: ["--all-features"]
     steps:
